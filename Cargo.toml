@@ -33,7 +33,7 @@ section = "utils"
 priority = "optional"
 assets = [
     ["target/release/rustcooling", "usr/bin/", "755"],
-    ["packaging/deb/rustcooling.service", "lib/systemd/system/", "644"],
+    ["packaging/rustcooling.service", "lib/systemd/system/", "644"],
     ["packaging/99-idcooling.rules", "etc/udev/rules.d/", "644"],
 ]
 systemd-units = { unit-name = "rustcooling", enable = true, start = true }
