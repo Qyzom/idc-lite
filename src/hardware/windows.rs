@@ -128,6 +128,12 @@ pub struct WindowsHardwareProvider {
     prev_user: u64,
 }
 
+impl Default for WindowsHardwareProvider {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl WindowsHardwareProvider {
     pub fn new() -> Self {
         init_com_once();
