@@ -1,0 +1,39 @@
+[package]
+name = "rustcooling"
+version = "1.0.0"
+edition = "2021"
+authors = ["Qyzom <t0lotsmail@gmail.com>"]
+description = "High-performance, ultra-lightweight CLI & daemon for ID-COOLING FX liquid coolers LCD displays"
+license = "MIT"
+repository = "https://github.com/Qyzom/RustCooling"
+readme = "README.md"
+keywords = ["id-cooling", "hardware-monitor", "cli", "daemon", "hid"]
+categories = ["command-line-utilities", "hardware-support"]
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "cargo", "color"] }
+colored = "2.1"
+hidapi = "2.6"
+ctrlc = "3.4"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.58", features = [
+    "Win32_System_Performance",
+    "Win32_System_Wmi",
+    "Win32_System_Com",
+    "Win32_System_Threading"
+] }
+
+[package.metadata.deb]
+maintainer = "Qyzom <t0lotsmail@gmail.com>"
+copyright = "2026, Qyzom"
+license-file = ["LICENSE", "4"]
+extended-description = "High-performance ultra-lightweight daemon for ID-COOLING FX cooler LCD screen."
+section = "utils"
+priority = "optional"
+assets = [
+    ["target/release/rustcooling", "usr/bin/", "755"],
+    ["packaging/deb/rustcooling.service", "lib/systemd/system/", "644"],
+    ["packaging/99-idcooling.rules", "etc/udev/rules.d/", "644"],
+]
+systemd-units = { unit-name = "rustcooling", enable = true, start = true }
