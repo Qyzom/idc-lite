@@ -1,0 +1,120 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact_name: rustcooling.exe
+            asset_name: rustcooling-windows-x86_64.exe
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: rustcooling
+            asset_name: rustcooling-linux-x86_64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libudev-dev pkg-config
+
+      - name: Build release binary
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Prepare Windows artifact
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          cp "target/${{ matrix.target }}/release/${{ matrix.artifact_name }}" "${{ matrix.asset_name }}"
+
+      - name: Package Linux Binary & .deb
+        if: runner.os == 'Linux'
+        run: |
+          cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} ${{ matrix.asset_name }}
+
+          # Prepare .deb package structure
+          mkdir -p deb_pkg/usr/bin
+          mkdir -p deb_pkg/usr/lib/udev/rules.d
+          mkdir -p deb_pkg/usr/lib/systemd/system
+          mkdir -p deb_pkg/DEBIAN
+
+          cp target/${{ matrix.target }}/release/rustcooling deb_pkg/usr/bin/
+          cp packaging/99-idcooling.rules deb_pkg/usr/lib/udev/rules.d/
+          cp packaging/rustcooling.service deb_pkg/usr/lib/systemd/system/
+          cp packaging/deb/control deb_pkg/DEBIAN/
+          cp packaging/deb/postinst deb_pkg/DEBIAN/
+          cp packaging/deb/prerm deb_pkg/DEBIAN/
+
+          chmod 755 deb_pkg/usr/bin/rustcooling
+          chmod 755 deb_pkg/DEBIAN/postinst deb_pkg/DEBIAN/prerm
+          chmod 644 deb_pkg/DEBIAN/control
+          chmod 644 deb_pkg/usr/lib/udev/rules.d/99-idcooling.rules
+          chmod 644 deb_pkg/usr/lib/systemd/system/rustcooling.service
+
+          dpkg-deb --build deb_pkg rustcooling_1.0.0_amd64.deb
+
+      - name: Upload Windows Asset
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.asset_name }}
+
+      - name: Upload Linux Assets
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifacts
+          path: |
+            ${{ matrix.asset_name }}
+            rustcooling_1.0.0_amd64.deb
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display downloaded files
+        run: ls -R artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/rustcooling-windows-x86_64.exe/rustcooling-windows-x86_64.exe
+            artifacts/linux-artifacts/rustcooling-linux-x86_64
+            artifacts/linux-artifacts/rustcooling_1.0.0_amd64.deb

@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "configure" ]; then
+    if [ -f /usr/lib/udev/rules.d/99-idcooling.rules ] || [ -f /etc/udev/rules.d/99-idcooling.rules ]; then
+        udevadm control --reload-rules || true
+        udevadm trigger || true
+    fi
+
+    if [ -d /run/systemd/system ]; then
+        systemctl daemon-reload || true
+        systemctl enable --now rustcooling.service || true
+    fi
+fi
+
+exit 0

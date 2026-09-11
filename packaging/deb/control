@@ -1,0 +1,8 @@
+Package: rustcooling
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Qyzom <t0lotsmail@gmail.com>
+Description: LCD hardware monitor CLI daemon for ID-COOLING FX coolers
+ High-performance, ultra-lightweight CLI & daemon for ID-COOLING FX liquid coolers LCD displays.

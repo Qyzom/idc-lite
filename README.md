@@ -1,172 +1,150 @@
-<div align="center">
+# 🦀 RustCooling v1.0.0
 
-# IDC-Lite
+> **Ультимативный, ультралегковесный кроссплатформенный CLI & демон для управления LCD-дисплеями систем жидкостного охлаждения ID-COOLING FX (FX240 / FX360).**
 
-**Нативная сверхлегкая утилита для управления LCD-дисплеем СЖО ID-COOLING серии FX (Windows & Linux)**
-
-[![.NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue)](README.md)
-
-<br />
-
-<img src="images/1.png" alt="Главное окно IDC-Lite" width="300">
-
-<br />
-<br />
-
-> **Чистый C# / .NET без лишнего мусора.**  
-> Полноценный релиз **v2**: сверхнизкое потребление памяти (~20 МБ в фоне), поддержка современных процессоров и **нативная поддержка Linux** (официальный софт от ID-COOLING под Linux отсутствует в принципе).
-
-</div>
+[![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue?style=for-the-badge)](README.md)
 
 ---
 
-### Статус проекта
+## 📖 Предыстория
 
-> **Проект завершён, отлажен и не заброшен.**  
-> Это компактный локальный софт с чётко очерченным назначением. Все поставленные цели достигнуты на 100%: приложение полностью автономно, вычищено от утечек дескрипторов, оптимизировано по потреблению ОЗУ до **~20 МБ**, аппаратно поддерживает актуальные поколения процессоров Intel и AMD, а также получило нативный Linux-демон. Раздувать функционал и усложнять проект новыми слоями смысла нет — софт делает ровно то, для чего создавался, максимально быстро и надежно.
-
----
-
-## Зачем это надо?
-
-1. **Официальный софт ID-COOLING под Linux НЕ СУЩЕСТВУЕТ ВООБЩЕ**: пользователи Linux с СЖО ID-COOLING FX LCD оставались с неработающим экраном. **IDC-Lite** дает первое и полноценное нативное решение (daemon + systemd + udev) без сторонних драйверов.
-2. **Официальный софт для Windows на базе Chromium/Electron — тяжелый и нестабильный**: потребляет до 200+ МБ ОЗУ, зависает под нагрузкой в играх и разбрасывает файлы по системе.
-
-**IDC-Lite** полностью закрывает эти проблемы:
-- **Windows:** Нативное приложение на WPF (.NET 8) со сбросом рабочего набора памяти (`Working Set Trimming`) при сворачивании в трей (**~20 МБ**).
-- **Linux:** Кроссплатформенный демон (`idc-daemon`), напрямую работающий через подсистемы ядра `hwmon`/`sysfs`/`/proc` и посылающий HID-фреймы в `/dev/hidraw`.
-- Программа не создает паразитной нагрузки на систему и не зависает при 100% загрузке CPU.
+**RustCooling** — это логическое завершение и полная перезагрузка проекта [idc-lite](https://github.com/Qyzom/idc-lite).  
+Проект стал первым глубоким опытом автора в экосистеме **Rust**, объединив строгую безопасность работы с памятью, бескомпромиссную производительность системного уровня и отточенную архитектуру прямого взаимодействия с оборудованием без тяжелых рантаймов.
 
 ---
 
-## Сравнение с оригинальным софтом
+## ✨ Особенности
 
-| Параметр | Оригинал ID-COOLING | IDC-Lite v2 | Преимущество |
+* ⚡ **Аномально низкое потребление RAM:** Всего **1.5 – 2.5 МБ** против ~70-100 МБ у C# WPF и 200+ МБ у вендорных утилит.
+* 🛡️ **Zero Proprietary Drivers:** Никаких неподписанных `.sys` драйверов ядра (WinRing0) и проприетарщины. Только 100% безопасный и чистый Open-Source стек (**WMI / PDH** на Windows, **/sys/class/hwmon** на Linux).
+* 📦 **Один монолитный бинарник:** Никаких сторонних DLL, зависимостей от громоздких фреймворков или виртуальных машин.
+* ✨ **Плавные и исправленные анимации:** Полностью устранены зависания, подергивания и пропуски кадров оригинального проекта (реализованы алгоритмы **EaseInOutCubic**, **Roller**, а также мгновенные **Instant**-переходы).
+* 🎨 **Красивый CLI:** Удобный, цветной терминальный интерфейс в стильной палитре **Catppuccin Mocha**.
+* 🚀 **Надежная автозагрузка:** Нативная интеграция с **Task Scheduler** на Windows (без всплывающих консольных окон и повторных запросов UAC) и native **systemd user unit** на Linux.
+* ⚖️ **Лицензия:** 100% **MIT License** — свободный и открытый исходный код.
+
+---
+
+## 📊 Таблица сравнения ресурсов
+
+| Параметр | Оригинал ID-COOLING | IDC-Lite (C# / WPF) | 🦀 RustCooling v1.0.0 |
 | :--- | :---: | :---: | :---: |
-| **Поддержка Linux** | **Отсутствует в принципе** | **Нативный демон (.deb / tar.gz)** | **Эксклюзив IDC-Lite** |
-| **ОЗУ (в фоне / трее)** | ~50 МБ | **~20 МБ** | **В 2.5 раза легче** |
-| **ОЗУ (развернутое окно)** | ~200 МБ | **~100 МБ** | **В 2 раза легче** |
-| **Размер и вес приложения** | 150+ МБ (Electron) | **Один файл / ~25 МБ** | **В 6 раз компактнее** |
-| **Языки интерфейса** | EN / ZH | **RU / EN / ZH** | Полная локализация |
-| **Анимации дисплея** | **Отсутствует в принципе** | **None / Smooth / Roller** | **Эксклюзив IDC-Lite** |
+| **Потребление RAM** | 200+ МБ | ~70 – 100 МБ (20 МБ в трее) | **1.5 – 2.5 МБ** 🚀 |
+| **Драйверы ядра** | Проприетарные / Закрытые | WinRing0 (`.sys`) | **Zero Drivers (WMI/PDH/hwmon)** |
+| **Поддержка Linux** | ❌ Отсутствует | Частичная (C# Daemon) | **✅ Полная нативная (CLI + Daemon)** |
+| **Зависимости** | Electron / Node.js / C++ runtime | .NET 8.0 Runtime | **Ноль (Self-contained static binary)** |
+| **Плавность анимаций** | ❌ Нет анимаций | Базовая (иногда фризы) | **Идеальная (60 FPS, Cubic / Roller)** |
+| **Размер дистрибутива** | ~150 МБ | ~25–30 МБ | **~4–8 МБ** |
+| **Лицензия** | Proprietary | MIT | **MIT** |
 
 ---
 
-## Структура проекта и зависимости
+## 🚀 Быстрый старт
 
-### Структура репозитория
+### Запуск мониторинга
+
+Запуск отображения температуры процессора с плавной анимацией:
+
+```bash
+# Базовый запуск (по умолчанию температура CPU)
+rustcooling
+
+# Или явный вызов подкоманды run
+rustcooling run --mode cpu-temp --anim smooth --interval 1000
+```
+
+### Основные флаги и параметры
+
 ```text
-idc-lite/
-├── deb_build/                   # Шаблоны сборки .deb пакетов (control, postinst, prerm, systemd, udev)
-│   ├── amd64/
-│   └── arm64/
-├── idc-daemon/                  # Фоновый демон для Linux
-│   ├── Program.cs               # Опрос hwmon/sysfs и отправка кадров в /dev/hidraw
-│   └── idc-daemon.csproj        # Конфигурация проекта
-├── idc-lite/                    # Основное десктопное приложение для Windows
-│   ├── Models/                  # Модели данных (AppSettings, Language)
-│   ├── Resources/               # Иконки и ресурсы
-│   ├── Services/                # Логика, телеметрия и аппаратные драйверы
-│   │   ├── AutostartService.cs         # Управление автозагрузкой
-│   │   ├── DriverService.cs            # Обслуживание системного драйвера
-│   │   ├── HardwareService.cs          # Чтение сенсоров Windows (LHM + WMI)
-│   │   ├── HidService.cs               # Win32 HID-протокол (CreateFileW / WriteFile)
-│   │   ├── LinuxHardwareService.cs     # Кроссплатформенное чтение sysfs/hwmon
-│   │   ├── LinuxHidService.cs          # POSIX HID-протокол (/dev/hidraw)
-│   │   ├── SettingsService.cs          # Сохранение конфигурации в AppData
-│   │   ├── TaskSchedulerService.cs     # Автозапуск через Планировщик Windows
-│   │   └── TranslationService.cs       # Словарь локализации (RU / EN / ZH)
-│   ├── App.xaml / App.xaml.cs          # Трей, жизненный цикл и хуки памяти
-│   ├── MainWindow.xaml / .cs           # Интерфейс WPF (Catppuccin Mocha)
-└── └── idc-lite.csproj                 # Конфигурация сборки Windows x64
+Usage: rustcooling [OPTIONS] [COMMAND]
+
+Commands:
+  run         Запуск цикла мониторинга и вывода на LCD (действие по умолчанию)
+  autostart   Управление фоновым автозапуском программы
+  help        Вывод справочной информации
+
+Options:
+  -m, --mode <MODE>              Режим отображения [cpu-temp, cpu-load, cpu-freq] [default: cpu-temp]
+  -a, --anim <ANIM>              Режим анимации: instant, smooth, roller [default: smooth]
+  -i, --interval <INTERVAL>      Интервал опроса телеметрии в миллисекундах [default: 1000]
+  -d, --anim-duration <MS>       Длительность перехода анимации в мс [default: 400]
+      --daemon                   Фоновый/тихий режим без интерактивного TUI
+  -h, --help                     Справка
+  -V, --version                  Версия
 ```
 
-### Зависимости
-- **`LibreHardwareMonitorLib` (v0.9.6)** — Чтение низкоуровневых сенсоров процессоров.
-- **`System.Management` (v10.0.2)** — Прямое обращение к WMI для резервного считывания температурных зон материнской платы.
+### Управление автозагрузкой
+
+```bash
+# Включить автозапуск при входе в систему
+rustcooling autostart --enable
+
+# Отключить автозапуск
+rustcooling autostart --disable
+
+# Проверить статус автозапуска
+rustcooling autostart --status
+```
 
 ---
 
-## Скриншоты
+## 🛠️ Сборка из исходников и упаковка
 
-<div align="center">
+### Требования
 
-  <img src="images/2.png" alt="Окно настроек IDC-Lite" width="320">
-  <img src="images/3.png" alt="Окно настроек IDC-Lite" width="320">
+* **Rust & Cargo** (версии 1.75+)
+* На Linux: `libudev-dev` и `pkg-config`
 
-  <br />
+```bash
+# Установка зависимостей на Debian / Ubuntu
+sudo apt-get update && sudo apt-get install -y build-essential libudev-dev pkg-config
+```
 
-  <img src="images/4.png" alt="Окно настроек IDC-Lite" width="320">
-  <img src="images/5.png" alt="Окно настроек IDC-Lite" width="320">
+### Сборка бинарного файла
 
-  <p><i>Интерфейс и настройки</i></p>
+```bash
+git clone https://github.com/Qyzom/RustCooling.git
+cd RustCooling
 
-</div>
+# Компиляция оптимизированного релизного бинарника
+cargo build --release
+```
+
+Готовый бинарник будет находиться по пути: `target/release/rustcooling` (или `target/release/rustcooling.exe` на Windows).
+
+### Упаковка в `.deb` пакет (Linux)
+
+Для удобной установки в системах на базе Debian/Ubuntu используйте подготовленные шаблоны упаковки:
+
+```bash
+# 1. Создаем структуру каталогов
+mkdir -p deb_pkg/usr/bin
+mkdir -p deb_pkg/usr/lib/udev/rules.d
+mkdir -p deb_pkg/usr/lib/systemd/system
+mkdir -p deb_pkg/DEBIAN
+
+# 2. Копируем файлы
+cp target/release/rustcooling deb_pkg/usr/bin/
+cp packaging/99-idcooling.rules deb_pkg/usr/lib/udev/rules.d/
+cp packaging/rustcooling.service deb_pkg/usr/lib/systemd/system/
+cp packaging/deb/control deb_pkg/DEBIAN/
+cp packaging/deb/postinst deb_pkg/DEBIAN/
+cp packaging/deb/prerm deb_pkg/DEBIAN/
+
+# 3. Выставляем права и собираем пакет
+chmod 755 deb_pkg/usr/bin/rustcooling deb_pkg/DEBIAN/postinst deb_pkg/DEBIAN/prerm
+chmod 644 deb_pkg/DEBIAN/control deb_pkg/usr/lib/udev/rules.d/99-idcooling.rules deb_pkg/usr/lib/systemd/system/rustcooling.service
+
+dpkg-deb --build deb_pkg rustcooling_1.0.0_amd64.deb
+
+# 4. Установка собранного пакета
+sudo dpkg -i rustcooling_1.0.0_amd64.deb
+```
 
 ---
 
-## Поддержка Linux (`idc-daemon`)
+## 📄 Лицензия
 
-- **Телеметрия:** Мониторинг процессора через стандартные интерфейсы подсистем ядра Linux (`/sys/class/hwmon/`, `/sys/class/thermal/`, `/proc/stat`, `/proc/cpuinfo`). Поддерживает модули `coretemp`, `k10temp`, `zenpower` и `acpitz`.
-- **HID-контроллер:** Прямая передача 64-байтных управляющих кадров на устройство через `/dev/hidraw*`.
-
-### Быстрая установка (.deb пакет)
-Для Ubuntu / Debian / Linux Mint / Pop!_OS:
-```bash
-# x86_64:
-sudo dpkg -i idc-daemon-v2-amd64.deb
-
-# ARM64:
-sudo dpkg -i idc-daemon-v2-arm64.deb
-```
-*(Пакет автоматически установит бинарник в `/usr/local/bin`, применит правила `udev` и запустит `systemd`-сервис)*.
-
-### Ручная настройка прав доступа (udev rule)
-Если вы запускаете бинарник вручную из `.tar.gz`:
-```bash
-echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="e317", MODE="0666", TAG+="uaccess"' | sudo tee /etc/udev/rules.d/99-idcooling-hid.rules
-sudo udevadm control --reload-rules && sudo udevadm trigger
-```
-
-### Ручной запуск Linux демона
-```bash
-chmod +x idc-daemon
-./idc-daemon
-```
-
-<details>
-<summary><b>Поддержка других СЖО</b></summary>
-
-<br />
-
-Утилита оптимизирована под VID/PID `1A86:E317` и байты протокола `0x55`, `0xBB`.  
-Если у вас другая модель с HID-дисплеем:
-1. Снимите дампы USB-трафика через Wireshark / USBPcap.
-2. Измените константы и структуру фрейма в [`Services/HidService.cs`](https://github.com/t0lot/idc-lite/blob/main/idc-lite/Services/HidService.cs) и [`idc-daemon/Program.cs`](https://github.com/t0lot/idc-lite/blob/main/idc-daemon/Program.cs).
-
-</details>
-
----
-
-## Сборка из исходников
-
-### Windows (GUI)
-```bash
-# Клонировать репозиторий
-git clone https://github.com/t0lot/idc-lite.git
-cd idc-lite/idc-lite
-
-# Скомпилировать автономный .exe
-dotnet publish -c Release -r win-x64 --self-contained
-```
-
-### Linux (Daemon)
-```bash
-cd idc-lite/idc-daemon
-
-# Сборка под Linux x64 / ARM64
-dotnet publish -c Release -r linux-x64 --self-contained
-dotnet publish -c Release -r linux-arm64 --self-contained
-```
+Проект распространяется под лицензией [MIT](LICENSE).

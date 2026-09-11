@@ -1,0 +1,12 @@
+[Unit]
+Description=RustCooling ID-COOLING FX LCD Daemon
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rustcooling run --animation smooth --daemon
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
