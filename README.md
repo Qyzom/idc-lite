@@ -10,27 +10,19 @@
 
 <br />
 
-> [!WARNING]
 > ### ⚠️ DEPRECATED & DISCONTINUED IN FAVOR OF [RustCooling](https://github.com/Qyzom/RustCooling)
-> **English:**  
+> 
 > This legacy C# (.NET / WPF) implementation is deprecated, unstable, and resource-heavy. It relies on closed-source kernel drivers (`WinRing0`), suffers from runtime overhead, memory fragmentation, and unreliable Linux operation.
 > 
 > The project has been completely rewritten from scratch in pure **Rust** as a high-performance CLI utility and background daemon: **[RustCooling](https://github.com/Qyzom/RustCooling)**.
-> - **RAM Usage:** Under **2 MB** (down from 50–80 MB here).
-> - **Binary Size:** Single standalone binary ~800 KB with zero external dependencies.
-> - **Zero Kernel Drivers:** 100% open-source, using native OS APIs for telemetry and native Linux support (`systemd`, `udev`, `/sys/class/hwmon`).
 > 
 > **It is strongly recommended to use [RustCooling](https://github.com/Qyzom/RustCooling) instead!**
->
+> 
 > ---
->
-> **Русский:**  
+> 
 > Данная реализация на C# (.NET / WPF) устарела и признана неэффективной. Она содержит высокий оверхед рантайма, зависит от закрытых драйверов ядра WinRing0 и нестабильна под Linux.
 > 
 > Проект был полностью переписан с нуля на **Rust** в виде ультралегкой консольной утилиты и фонового демона: **[RustCooling](https://github.com/Qyzom/RustCooling)**.
-> - **Потребление RAM:** менее **2 МБ** (вместо 50–80 МБ здесь).
-> - **Размер:** один автономный бинарник ~800 КБ без зависимостей.
-> - **Безопасность:** 100% открытый код без сторонних драйверов ядра, нативный опрос датчиков и стабильная работа под Linux (`systemd`, `udev`, `/sys/class/hwmon`).
 > 
 > **Настоятельно рекомендуется переходить на [RustCooling](https://github.com/Qyzom/RustCooling)!**
 
