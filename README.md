@@ -8,26 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue)](README.md)
 
-<br />
-
-> ### ⚠️ DEPRECATED & DISCONTINUED IN FAVOR OF [RustCooling](https://github.com/Qyzom/RustCooling)
-> 
-> This legacy C# (.NET / WPF) implementation is deprecated, unstable, and resource-heavy. It relies on closed-source kernel drivers (`WinRing0`), suffers from runtime overhead, memory fragmentation, and unreliable Linux operation.
-> 
-> The project has been completely rewritten from scratch in pure **Rust** as a high-performance CLI utility and background daemon: **[RustCooling](https://github.com/Qyzom/RustCooling)**.
-> 
-> **It is strongly recommended to use [RustCooling](https://github.com/Qyzom/RustCooling) instead!**
-> 
-> ---
-> 
-> Данная реализация на C# (.NET / WPF) устарела и признана неэффективной. Она содержит высокий оверхед рантайма, зависит от закрытых драйверов ядра WinRing0 и нестабильна под Linux.
-> 
-> Проект был полностью переписан с нуля на **Rust** в виде ультралегкой консольной утилиты и фонового демона: **[RustCooling](https://github.com/Qyzom/RustCooling)**.
-> 
-> **Настоятельно рекомендуется переходить на [RustCooling](https://github.com/Qyzom/RustCooling)!**
-
-</div>
-
 ---
 
 ## Сравнение с оригинальным софтом
