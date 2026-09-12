@@ -8,12 +8,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue)](README.md)
 
+</div>
+
 ---
 
 ## Сравнение с оригинальным софтом
 
 | Параметр | Оригинал ID-COOLING (Electron) | IDC-Lite (C# / .NET) |
-| :--- | :---: | :---: | :---: |
+| :--- | :---: | :---: |
 | **Потребление ОЗУ** | ~180 – 250 МБ | ~50 – 80 МБ |
 | **Размер бинарника** | 150+ МБ | ~25 МБ |
 | **Драйверы ядра** | Закрытый Ring0 драйвер | WinRing0.sys |
@@ -23,31 +25,10 @@
 ---
 
 ## Структура репозитория
+
 ```text
 idc-lite/
 ├── deb_build/                   # Шаблоны сборки .deb пакетов
 ├── idc-daemon/                  # Устаревший фоновый демон для Linux
 ├── idc-lite/                    # Устаревшее десктопное приложение для Windows (WPF)
 └── README.md
-```
-
-## Сборка из исходников
-
-### Windows (WPF)
-```bash
-git clone https://github.com/Qyzom/idc-lite.git
-cd idc-lite/idc-lite
-dotnet publish -c Release -r win-x64 --self-contained
-```
-
-### Linux (Daemon)
-```bash
-cd idc-lite/idc-daemon
-dotnet publish -c Release -r linux-x64 --self-contained
-```
-
----
-
-## Лицензия
-
-MIT License. См. [LICENSE](LICENSE).
