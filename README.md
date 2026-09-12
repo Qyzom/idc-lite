@@ -29,6 +29,6 @@
 ```text
 idc-lite/
 ├── deb_build/                   # Шаблоны сборки .deb пакетов
-├── idc-daemon/                  # Устаревший фоновый демон для Linux
-├── idc-lite/                    # Устаревшее десктопное приложение для Windows (WPF)
+├── idc-daemon/                  # Фоновый демон для Linux
+├── idc-lite/                    # Ддесктопное приложение для Windows (WPF)
 └── README.md
